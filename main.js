@@ -7,11 +7,11 @@ var configObj = require('./botconfig.json')
 
 var commandStatsObj = require('./command_stats.json')
 var hutheroObj = require('./hutheroes.json')
-
+var dcObj = require('./draftchampions.json')
 
 console.log(commandStatsObj);
 
-var list = ['!help', '!huthero', '!list'];
+var list = ['!help', '!huthero', '!hutprofit', '!dc', '!list'];
 
 // Add colorize to debug console
 logger.remove(logger.transports.Console);
@@ -60,6 +60,69 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
 	    		message: hero["text"]
 	    	});
 	    }
+    } else if (message.startsWith("!hutprofit")) {
+        var regex = /!hutprofit (\d+) (\d+)/g;
+        var match = regex.exec(message);
+        logger.log('debug', match);
+
+        if (match == null) {
+            HutBot.sendMessage({
+                to: channelID,
+                message: "**Please use this format for !hutprofit**\n\n**Usage:** !hutprofit  *Sell_Price*  *Purchased_For_Price*"
+            });
+        } else {
+            logger.log('debug', match[1]);
+            logger.log('debug', match[2]);
+
+            var sellPrice = Number(match[1])
+            var purchasePrice = Number(match[2])
+            var profit = (sellPrice * 0.95) - purchasePrice
+
+            var profitText = profit.toString();
+
+            HutBot.sendMessage({
+                to: channelID,
+                message: "**Sell Price:**  " + match[1] + "\n**Purchase Price:**  " + match[2] + "\n\n**Profit:**  " + profitText
+            });
+        }
+
+        commandStatsObj["!hutprofit"] += 1;
+
+        logger.debug('Hut Profit Calculator requested: ' + commandStatsObj["!hutprofit"] + ' times');
+    } else if (message.startsWith("!dc")) {
+        var regex = /!dc (\D*) (\d{2})/g;
+        var match = regex.exec(message);
+        logger.log('debug', match);
+        logger.log('debug', match[1]);
+        logger.log('debug', match[2]);
+
+        commandStatsObj["!dc"] += 1;
+        logger.debug('Draft Champions Information requested: ' + commandStatsObj["!dc"] + ' times');
+
+        if (typeof dcObj[match[1].toLowerCase()] == 'undefined') {
+            HutBot.sendMessage({
+                to: channelID,
+                message: "**No match found for:** " + match[1] + " - " + match[2]
+            });
+        } else {
+            var dc = dcObj[match[1].toLowerCase()];
+            logger.log('debug', dc);
+            if (typeof dc[match[2]] == 'undefined') {
+                HutBot.sendMessage({
+                    to: channelID,
+                    message: "**No match found for:** " + match[1] + " - " + match[2]
+                });
+            } else {
+                HutBot.sendMessage({
+                    to: channelID,
+                    message: dc[match[2]]["text"]
+                });
+                HutBot.sendMessage({
+                    to: channelID,
+                    message: dc[match[2]]["picture_link"]
+                });
+            }
+        }
     } else if (message.startsWith("!synergy")) {
         var regex = /!synergy/g;
         commandStatsObj["!synergy"] += 1;
@@ -101,7 +164,7 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
     	if (match == null) {
     		HutBot.sendMessage({
 	    		to: channelID,
-	    		message: "**Usage:** !help *Command*"
+	    		message: "**Usage:** !help *Command*\n\n**Try !list for more commands**"
 	    	});
 
 	    	return;
@@ -114,6 +177,18 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
 		    		message: "**Usage:** !huthero *Team Location*\n\nReturns Required Players 86+ Ovr, # of Gold Collectibles and # of Carbon Collectibles\n\n**Note: Must type New York Islanders or New York Rangers to see those teams' heroes instead of New York**"
 		    	});
     			break;
+            case "!hutprofit":
+                HutBot.sendMessage({
+                    to: channelID,
+                    message: "**Usage:** !hutprofit  *Sell_Price*  *Purchased_For_Price*\n\nReturns the total profit made at the current price\n\nProfit = (Sell_Price * 0.95) - Purchased_For_Price"
+                });
+                break;
+            case "!dc":
+                HutBot.sendMessage({
+                    to: channelID,
+                    message: "**Usage:** !dc *Player_Name*  *Overall_Rating*\n\n**Example:** !dc *malhotra*  *92*"
+                });
+                break;
     		default:
     			HutBot.sendMessage({
 		    		to: channelID,
@@ -127,7 +202,7 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
 
     	HutBot.sendMessage({
             to: channelID,
-            message: '**List of commands:** ' + list.join(' ')
+            message: '**List of commands:** ' + list.join('  ')
         });
     } else if (channelID == configObj["channel"]) {
         if (message.startsWith("!commandstats")) {

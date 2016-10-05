@@ -1,0 +1,32 @@
+{
+	"malhotra": {
+		"88": {
+			"text": "**Manny Malhotra** - **C** - 88",
+			"picture_link": "https://i.imgur.com/PvALTxB.png"
+		},
+		"92": {
+			"text": "**Manny Malhotra** - **C** - 92",
+			"picture_link": "https://i.imgur.com/qtBVABn.png"
+		}
+	},
+	"grossmann": {
+		"88": {
+			"text": "**Nicklas Grossmann** - **D** - 88",
+			"picture_link": "https://i.imgur.com/aPgunVW.png"
+		},
+		"92": {
+			"text": "**Nicklas Grossmann** - **D** - 92",
+			"picture_link": "https://i.imgur.com/mHwQGlE.png"
+		}
+	},
+	"emery": {
+		"88": {
+			"text": "**Ray Emery** - **G** - 88",
+			"picture_link": "https://i.imgur.com/f9HjWRI.jpg"
+		},
+		"92": {
+			"text": "**Ray Emery** - **G** - 92",
+			"picture_link": "https://i.imgur.com/LH6cdjw.png"
+		}
+	}
+}
