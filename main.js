@@ -11,7 +11,7 @@ var dcObj = require('./draftchampions.json')
 
 console.log(commandStatsObj);
 
-var list = ['!help', '!huthero', '!hutprofit', '!dc', '!list'];
+var list = ['!help', '!huthero', '!hutprofit', '!dc', '!list', '!synergy', '!synergies'];
 
 // Add colorize to debug console
 logger.remove(logger.transports.Console);
@@ -123,7 +123,7 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
                 });
             }
         }
-    } else if (message.startsWith("!synergy")) {
+    } else if (message.startsWith("!synergy") || message.startsWith("!synergies")) {
         var regex = /!synergy/g;
         commandStatsObj["!synergy"] += 1;
         ind_synergylist = "**Individual Synergy List:** \n\
