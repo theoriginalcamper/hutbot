@@ -1,5 +1,5 @@
 var logger = require("winston");
-var DiscordClient = require("discord.io");
+var Discord = require("discord.io");
 var request = require("request");
 var fs = require('fs');
 
@@ -20,14 +20,22 @@ logger.add(logger.transports.Console, {
 });
 logger.level = 'debug';
 
-var HutBot = new DiscordClient({
+var ServerID = "218987908709744640";
+var ModID = "218988487880343552";
+var AdminID = "218988126046126081";
+var RoleIDObj = {
+  "PS4": "222887121495523330",
+  "XB1": "222887094870212610"
+}
+
+var HutBot = new Discord.Client({
 	autorun: true,
 	token: configObj["token"]
 });
 
 HutBot.on('ready', function() {
     logger.info(HutBot.username + " - (" + HutBot.id + ")");
-    logger.info(configObj['channel'])
+    logger.info(configObj['channel']);
 });
 
 // HutBot.on('debug', function(event) {
@@ -147,11 +155,63 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
         **TW** - *Team Wheel* - +3 to Acceleration, Agility and Speed\n\
         **SB** - *Team Shot Blocking* - +4 to Agility, Balance, Shot Blocking and Durability\n\
         **T**  - *It's A Trap* - +3 to Stick Checking, Def. Awareness and Discipline\n"
-        
+
         HutBot.sendMessage({
             to: channelID,
             message: ind_synergylist + team_synergylist
         });
+    } else if (message.startsWith("!addtag")) {
+      var regex = /!addtag <@(\d*)> (\w{3})/g;
+      var match = regex.exec(message);
+
+      logger.debug(match[1])
+      logger.debug(match[2])
+
+      var userIDtoTag = match[1];
+      var systemTag = match[2].toUpperCase();
+
+      logger.debug(systemTag == "XB1");
+      currentUser = HutBot.servers[ServerID].members[userID];
+
+      if (currentUser.roles.includes(AdminID) || currentUser.roles.includes(ModID)) {
+        if (match == null) {
+      		HutBot.sendMessage({
+  	    		to: channelID,
+  	    		message: "**Usage:** !addtag *@UserMention* *PS4 or XB1*"
+  	    	});
+
+  	    	return;
+      	} else if (systemTag != "XB1" && systemTag != "PS4") {
+          HutBot.sendMessage({
+  	    		to: channelID,
+  	    		message: "**Usage:** !addtag *@UserMention* *PS4 or XB1* \nPlease tag the user as PS4 or XB1"
+  	    	});
+        } else {
+          logger.debug(RoleIDObj[systemTag]);
+
+          HutBot.addToRole({
+            serverID: ServerID,
+            roleID: RoleIDObj[systemTag],
+            userID: userIDtoTag
+          })
+
+          var taggedUserName;
+          logger.info(HutBot.servers[ServerID].members[userIDtoTag])
+
+          HutBot.sendMessage({
+            to: channelID,
+            message: "Tag added"
+          })
+        }
+
+      } else {
+        HutBot.sendMessage({
+          to: channelID,
+          message: "Sorry this command is for Mod and Admin use only"
+        })
+      }
+
+
     } else if (message.startsWith("!help")) {
     	var regex = /!help (.*)/g;
     	var match = regex.exec(message);
@@ -177,18 +237,18 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
 		    		message: "**Usage:** !huthero *Team Location*\n\nReturns Required Players 86+ Ovr, # of Gold Collectibles and # of Carbon Collectibles\n\n**Note: Must type New York Islanders or New York Rangers to see those teams' heroes instead of New York**"
 		    	});
     			break;
-            case "!hutprofit":
-                HutBot.sendMessage({
-                    to: channelID,
-                    message: "**Usage:** !hutprofit  *Sell_Price*  *Purchased_For_Price*\n\nReturns the total profit made at the current price\n\nProfit = (Sell_Price * 0.95) - Purchased_For_Price"
-                });
-                break;
-            case "!dc":
-                HutBot.sendMessage({
-                    to: channelID,
-                    message: "**Usage:** !dc *Player_Name*  *Overall_Rating*\n\n**Example:** !dc *malhotra*  *92*"
-                });
-                break;
+        case "!hutprofit":
+            HutBot.sendMessage({
+                to: channelID,
+                message: "**Usage:** !hutprofit  *Sell_Price*  *Purchased_For_Price*\n\nReturns the total profit made at the current price\n\nProfit = (Sell_Price * 0.95) - Purchased_For_Price"
+            });
+            break;
+        case "!dc":
+            HutBot.sendMessage({
+                to: channelID,
+                message: "**Usage:** !dc *Player_Name*  *Overall_Rating*\n\n**Example:** !dc *malhotra*  *92*"
+            });
+            break;
     		default:
     			HutBot.sendMessage({
 		    		to: channelID,
@@ -212,7 +272,7 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
 	            to: channelID,
 	            message: "**Command Stats:**\n\t\t" + "**Hut Hero:** " + commandStatsObj["!huthero"]
 	        });
-    	} 
+    	}
     }
 });
 
@@ -228,7 +288,7 @@ if (process.platform === "win32") {
 }
 
 process.on("SIGINT", function () {
-	
+
 	logger.info(JSON.stringify(commandStatsObj));
 	fs.writeFileSync('./command_stats.json', JSON.stringify(commandStatsObj), 'utf-8');
 	logger.info('Command Stats JSON written to file.');

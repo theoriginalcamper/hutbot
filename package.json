@@ -1,6 +1,6 @@
 {
   "name": "hutbot",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Discord Bot",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.io": "^1.13.4",
+    "discord.io": "^2.5.0",
     "fuzzyset.js": "0.0.1",
     "jsonfile": "^2.3.1",
     "request": "^2.73.0",
