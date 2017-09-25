@@ -159,27 +159,27 @@ HutBot.on('message', function(user, userID, channelID, message, event) {
     } else if (message.startsWith("!synergy") || message.startsWith("!synergies")) {
         var regex = /!synergy/g;
         commandStatsObj["!synergy"] += 1;
-        ind_synergylist = "**Individual Synergy List:** \n\
-        **DD** - *Dirty Dangler* - +3  to Deking, Hand-Eye and Puck Control\n\
-        **PP** - *Passing Playmaker* - +3 to Passing, Poise and Off. Awareness\n\
-        **WW** - *Wicked Wristers* - +3 to Wrist Shot Accuracy and Wrist Shot Power\n\
-        **OJ** - *Offensive Juggernaut* - +2 to Slap Shot Power, Slap Shot Accuracy, Off. Awareness and Strength\n\
-        **S**  - *Speedsters* - +2 to Acceleration, Speed and Agility\n\
-        **NP** - *Net Front Presence* - +3 to Hand Eye, Aggressiveness, Balance and Strength\n\
-        **FM** - *Faceoff Master* - +4 to Poise and Faceoffs\n\
-        **RF** - *Relentless Forecheck* - +3 to Acceleration, Endurance, Stick Checking and Body Checking\n\
-        **DR** - *Defensively Responsible* - +3 to Stick Checking, Body Checking, Def. Awareness and Balance\n\
-        **HH** - *Heavy Hitters* - +4 to Body Checking, Strength and Def. Awareness\n\
-        **IS** - *Iron Shins* - +4 to Def. Awareness, Shot Blocking and Durability\n\n"
+        ind_synergylist = "**Individual Synergy List (4 to Activate):** \n\
+        **NZ** - *Neutral Zone Defender* - +2  to Aggression, Def. Awareness and Stick Checking\n\
+        **P**  - *Protect the Puck* - +2 to Agility, Hand-Eye and Puck Control\n\
+        **RS** - *Rocket Skates* - +2 to Acceleration, Durability and Speed\n\
+        **GD** - *Pucks Drop Gloves Drop* - +2 to Aggression, Faceoffs and Fighting Skill\n\
+        **HS** - *Human Shield* - +2 to Def. Awareness, Discipline and Shot Blocking\n\
+        **DZ** - *Dangler Zone* - +2 to Deking, Hand-Eye and Puck Control\n\
+        **PM** - *Pinball Machine* - +3 to Body Checking and Endurance\n\
+        **FS** - *Fine Shooting* - +3 to Balance and Wrist Shot Accuracy\n\
+        **BM** - *Breakout Master* - +3 to Acceleration and Wrist Shot Power\n\
+        **PP** - *Precision Passing* - +3 to Off. Awareness and Passing\n\
+        **HT** - *Hammer Time* - +2 to Body Checking, Slap Shot Power and Strength\n\
+        **CP** - *Clutch Player* - +2 to Endurance, Puck Control and Wrist Shot Accuracy\n\
+        **FF** - *Frequent Fighter* - +3 to Durability and Fighting Skill\n\n"
 
         team_synergylist = "**Team Synergy List:**\n\
-        **1T** - *One-timer Effeciency* - +3 to Hand-Eye, Passing, Off. Awareness and Slap Shot Power\n\
-        **CG** - *Cycle Game* - +2 to Endurance, Agility, Puck Control and Passing\n\
-        **B**  - *Long Range Bombers* - +3 to Slap Shot Power, Slap Shot Accuracy and Off. Awareness\n\
-        **TT** - *Tape to Tape* - +3 to Passing, Off. Awareness and Poise\n\
-        **TW** - *Team Wheel* - +3 to Acceleration, Agility and Speed\n\
-        **SB** - *Team Shot Blocking* - +4 to Agility, Balance, Shot Blocking and Durability\n\
-        **T**  - *It's A Trap* - +3 to Stick Checking, Def. Awareness and Discipline\n"
+        **LL** - *Locker Room Leaders* - +3 to Discipline, Endurance, Off. Awareness and Poise\n\
+        **S**  - *Silky Smooth* - +3 to Acceleration, Agility, Deking and Puck Control\n\
+        **TN** - *Thread the Needle* - +3 to Balance, Hand-Eye, Passing and Speed\n\
+        **AA** - *Angry Aggressors* - +3 to Aggression, Body Checking, Fighting Skill and Stick Checking\n\
+        **CW** - *Concrete Wall* - +3 to Def. Awareness, Durability, Shot Blocking and Strength\n"
 
         HutBot.sendMessage({
             to: channelID,
