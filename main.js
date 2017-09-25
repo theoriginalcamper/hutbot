@@ -6,7 +6,7 @@ var fs = require('fs');
 var configObj = require('./botconfig.json')
 
 var commandStatsObj = require('./command_stats.json')
-var hutheroObj = require('./hutheroes.json')
+var hutheroObj = require('./hutheroes18.json')
 var dcObj = require('./draftchampions.json')
 
 console.log(commandStatsObj);
@@ -45,6 +45,31 @@ HutBot.on('ready', function() {
 HutBot.on('message', function(user, userID, channelID, message, event) {
     if (message.startsWith("!huthero")) {
     	var regex = /!huthero (.*)/g;
+    	var match = regex.exec(message);
+    	logger.log('debug', match[1]);
+
+    	commandStatsObj["!huthero"] += 1;
+    	logger.debug('HUT Hero Information requested: ' + commandStatsObj["!huthero"] + ' times');
+
+
+    	if (typeof hutheroObj[match[1].toLowerCase()] == 'undefined') {
+    		HutBot.sendMessage({
+	    		to: channelID,
+	    		message: "**No match found for:** " + match[1]
+	    	});
+    	} else {
+	    	var hero = hutheroObj[match[1].toLowerCase()];
+	    	HutBot.sendMessage({
+                to: channelID,
+                message: hero["picture_link"]
+            });
+            HutBot.sendMessage({
+	    		to: channelID,
+	    		message: hero["text"]
+	    	});
+	    }
+    } else if (message.startsWith("!hh")) {
+      var regex = /!hh (.*)/g;
     	var match = regex.exec(message);
     	logger.log('debug', match[1]);
 
